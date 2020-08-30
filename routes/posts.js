@@ -23,7 +23,7 @@ router.get
 );
 
 
-// FINDS SPECIFIC POSTS
+// FINDS SPECIFIC POSTS BY ID
 router.get
 ('/:ticketid', async (req,res) => 
     {
@@ -37,6 +37,51 @@ router.get
       
     }    
 );
+
+// DELETING A TICKET
+router.delete
+('/:ticketid', async (req,res) => 
+    {
+        try{
+            const removedPost = await Post.remove({_id : req.params.ticketid});
+            res.json(removedPost);
+        }
+        catch(err){
+            res.json({message:err});
+        }
+      
+    }    
+);
+
+// UPDATING A POST BY ID
+router.patch
+('/:ticketid', async (req,res) => 
+    {
+        try{
+            const updatedPost = await Post.updateOne(
+                {   _id : req.params.ticketid},
+                { $set: { timing:
+                
+                     {
+                        hours: req.body.timing.hours,
+                        minutes: req.body.timing.minutes
+                     } 
+                  }
+                }
+
+             );      
+                
+                res.json(updatedPost);
+                
+        }
+        catch(err){
+            res.json({message:err});
+        }
+      
+    }    
+);
+
+
 
 
 
@@ -102,55 +147,7 @@ router.post
 
 );
 
-router.post
-('/update',urlencodedParser,(req,res) => 
-    {
-        //console.log(req.body);
-        if(req.body.name)
-        {
-           
-                    res.json({message: " You don't have any bookinngs "});
-                
-                 return;
 
-        }
-
-        
-        const post = new Post
-        (
-            {
-                name: req.body.name,
-                phone_number: req.body.phone_number,
-                timing:
-                    {
-                        hours: req.body.timing.hours,
-                        minutes: req.body.timing.minutes
-                    }
-             
-                   
-                    
-                
-            }
-        );
-        post.save()
-        .then
-        (
-            data=>
-            {
-                res.json(data);
-            }
-        )
-        .catch
-        (err=>
-            {
-                res.json({message: err});
-            }
-        
-        )
-        
-    }    
-
-);
 
 
 module.exports = router;
