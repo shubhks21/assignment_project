@@ -18,9 +18,18 @@ const PostSchema = mongoose.Schema
 
         timing:
         {
+
+            day: Date,
+
             hours: Number,
             
             minutes: Number
+        },
+
+        mark_expiry:
+        {
+            type: Boolean,
+            default: 0
         }
 
     }
