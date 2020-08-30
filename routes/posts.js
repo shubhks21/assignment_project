@@ -38,6 +38,30 @@ router.get
     }    
 );
 
+
+// FINDS SPECIFIC POSTS BY time
+router.get
+('/:day/:hours/:minutes', async (req,res) => 
+    {
+        try{
+            const spost = await Post.find({timing:{day: req.params.day, hours:req.params.hours, minutes:req.params.minutes}});
+            //console.log(req.params.day);
+            //console.log(req.params.minutes);
+            res.json(spost);
+        }
+          catch(err)
+          {
+            res.json({message:err});
+          } 
+      
+           
+        
+      
+    }    
+);
+
+
+
 // DELETING A TICKET
 router.delete
 ('/:ticketid', async (req,res) => 
@@ -63,6 +87,7 @@ router.patch
                 { $set: { timing:
                 
                      {
+                         day: req.body.timing.day,
                         hours: req.body.timing.hours,
                         minutes: req.body.timing.minutes
                      } 
@@ -80,8 +105,6 @@ router.patch
       
     }    
 );
-
-
 
 
 
@@ -117,7 +140,8 @@ router.post
                 phone_number: req.body.phone_number,
                 timing:
                 
-                    {
+                    {   
+                        day: req.body.timing.day,
                         hours: req.body.timing.hours,
                         minutes: req.body.timing.minutes
                     }
